@@ -1,0 +1,143 @@
+--A1
+
+CREATE DATABASE LibraryDB;
+
+USE LibraryDB;
+
+CREATE TABLE Books (book_id INT PRIMARY KEY, book_name VARCHAR(100), author VARCHAR(100),price DECIMAL(10,2));
+CREATE TABLE Members (member_id INT PRIMARY KEY,member_name VARCHAR(100),city VARCHAR(50),phone VARCHAR(15));
+CREATE TABLE Borrow ( borrow_id INT PRIMARY KEY,book_id INT, member_id INT,borrow_date DATE);
+
+ALTER TABLE Books ADD category VARCHAR(50);
+ALTER TABLE Books ADD quantity INT;
+ALTER TABLE Members ADD email VARCHAR(100);
+ALTER TABLE Borrow ADD return_date DATE;
+ALTER TABLE Books MODIFY price DECIMAL(10,2);
+ALTER TABLE Books CHANGE quantity stock_quantity INT;
+
+
+
+-- A2 - DML
+-- INSERT 10 BOOKS TO THE LIBRARY DATABASE
+
+INSERT INTO Books(book_id, book_name, author, price, category, stock_quantity)
+VALUES
+(101,'SQL Basics', 'John Smith', 450.00, 'Education', 10),
+(102,'Python Programming', 'James Brown', 650.00, 'Technology', 15),
+(103,    'Java Fundamentals', 'Robert Martin', 700.00, 'Technology', 12),
+(104, 'Web Development', 'David Lee', 550.00, 'Technology', 8),
+(105,   'Data Science', 'Andrew Ng', 800.00, 'Education', 20),
+(106, 'Database Design', 'Mark Allen', 500.00, 'Technology', 5),
+(107,  'Software Engineering', 'Martin Fowler', 900.00, 'Technology', 18),
+(108, 'Statistics Basics', 'Peter Smith', 350.00, 'Education', 25),
+(109,   'SQL Advanced', 'John Smith', 750.00, 'Technology', 14),
+(110, 'Computer Networks', 'William Brown', 600.00, 'Technology', 9);
+-- INSERT 8 MEMBERS
+
+INSERT INTO Members(member_id, member_name, city, phone, email)
+VALUES
+(201, 'Arun Kumar', 'Chennai', '9876543210', 'arun@gmail.com'),
+(202, 'Priya Raj', 'Madurai', '9876543211', 'priya@gmail.com'),
+(203, 'Karthik S', 'Nagercoil', '9876543212', 'karthik@gmail.com'),
+(204, 'Divya M', 'Tirunelveli', '9876543213', 'divya@gmail.com'),
+(205, 'Rahul K', 'Coimbatore', '9876543214', 'rahul@gmail.com'),
+(206, 'Meena R', 'Salem', '9876543215', 'meena@gmail.com'),
+(207, 'Vijay P', 'Trichy', '9876543216', 'vijay@gmail.com'),
+(208, 'Anitha S', 'Chennai', '9876543217', 'anitha@gmail.com');
+
+-- INSERT 10 BORROW RECORDS 
+
+INSERT INTO Borrow(borrow_id, book_id, member_id, borrow_date, return_date)
+VALUES
+(301, 101, 201, '2026-09-01', '2026-09-10'),
+(302, 102, 202, '2026-09-02', '2026-09-12'),
+(303, 103, 203, '2026-09-03', '2026-09-13'),
+(304, 104, 204, '2026-09-04', '2026-09-14'),
+(305, 101, 205, '2026-09-05', '2026-09-15'),
+(306, 105, 206, '2026-09-06', '2026-09-16'),
+(307, 103, 207, '2026-09-07', '2026-09-17'),
+(308, 106, 208, '2026-09-08', '2026-09-18'),
+(309, 109, 201, '2026-09-09', '2026-09-19'),
+(310, 102, 202, '2026-09-10', '2026-09-20');
+
+
+-- ADD EXTRA  BOOK
+
+INSERT INTO Books(book_id, book_name, author, price, category, stock_quantity)
+VALUES(111, 'Artificial Intelligence', 'Alan Turing', 950.00, 'Technology', 10);
+
+
+-- ADD EXTRA MEMBER
+
+INSERT INTO Members(member_id, member_name, city, phone, email)
+VALUES(209, 'Sanjay Kumar', 'Thoothukudi', '9876543218', 'sanjay@gmail.com');
+
+
+-- ADDING NEWMEMBER IN THE BORROW TABLE
+
+INSERT INTO Borrow(borrow_id, book_id, member_id, borrow_date, return_date)
+VALUES(311, 111, 209, '2026-09-11', '2026-09-21');
+
+
+-- UPDATING  PRICE OF BOOK 103
+
+UPDATE Books SET price = 750.00 WHERE book_id = 103;
+
+-- INCREASING TECHNOLOGY BOOK PRICE BY 10%
+
+UPDATE Books SET price = price * 1.10 WHERE category = 'Technology';
+
+-- INCREASING THE STOCK QUANTITY 5
+
+UPDATE Books SET stock_quantity = stock_quantity + 5;
+-- UPDATE CITY IN MEMBER TABLE
+
+UPDATE Members SET city = 'Bangalore' WHERE member_id = 201;
+
+-- UPDATE EMAIL IN MY MEMBER TABLE
+
+UPDATE Members SET email = 'arun_new@gmail.com' WHERE member_id = 201;
+
+-- CHANGE CATEGORY AT BOOKS TABLE
+
+UPDATE Books SET category = 'Education'WHERE book_id = 106;
+
+-- UPDATE RETURN DATE IN BORROW TABLE
+
+UPDATE Borrow SET return_date = '2026-09-25'WHERE borrow_id = 301;
+
+-- DELETE BOOK 106 FOR SAMPLE
+
+DELETE FROM Books WHERE book_id = 106;
+
+-- DELETE MEMBER WITH NO BORROW RECORDS UNING NOT IN
+
+DELETE FROM Members WHERE member_id = 208 AND member_id NOT IN ( SELECT member_id FROM Borrow);
+
+-- DELETE SPECIFIC BORROW RECORD USING WHERE
+
+DELETE FROM Borrow WHERE borrow_id = 310;
+
+-- DELETE BOOKS WITH STOCK 0
+
+DELETE FROM Books WHERE stock_quantity = 0;
+
+
+-- A3 - DQL
+
+
+
+SELECT * FROM Books;
+SELECT book_name, author FROM Books;
+SELECT book_name, category, price FROM Books;
+SELECT *FROM Books WHERE price > 500;
+SELECT * FROM Books WHERE price < 500;
+SELECT * FROM Books WHERE price BETWEEN 300 AND 800;
+SELECT *FROM Books WHERE category = 'Technology';
+SELECT *FROM Books WHERE author = 'John Smith';
+SELECT *FROM Books WHERE book_name LIKE 'S%';
+SELECT * FROM Books WHERE book_name LIKE '%SQL%';
+SELECT *FROM Books WHERE category IN ('Technology', 'Education');
+SELECT *FROM Books WHERE price <> 500;
+SELECT *FROM Books WHERE stock_quantity > 10;
+SELECT *FROM Books WHERE stock_quantity BETWEEN 5 AND 15;
